@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OncoScan — a careful first look at a skin spot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <a class="skip-link" href="#scan">Skip to the scan tool</a>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 28" width="28" height="28">
+            <circle cx="14" cy="14" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <circle cx="14" cy="14" r="2.4" fill="currentColor" />
+          </svg>
+        </span>
+        <span class="brand-name">OncoScan</span>
+      </div>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#scan">Check a spot</a>
+        <a href="#how">How it works</a>
+        <a href="#principles">Privacy &amp; safety</a>
+        <a href="#help">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO — the scan tool itself is the hero -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <h1>Take a careful look at a skin spot.</h1>
+          <p class="hero-sub">Upload or capture a photo. OncoScan gives you a possible read and a confidence score in
+            plain language — then tells you plainly when it's time to see a doctor.</p>
+          <p class="hero-note">This tool does not diagnose anything. It's an educational first step, built to point you
+            toward professional care, not replace it.</p>
+        </div>
+
+        <div class="scan-tool" id="scan">
+          <div class="viewfinder" id="viewfinder">
+            <span class="corner tl" aria-hidden="true"></span>
+            <span class="corner tr" aria-hidden="true"></span>
+            <span class="corner bl" aria-hidden="true"></span>
+            <span class="corner br" aria-hidden="true"></span>
+
+            <div class="vf-empty" id="vfEmpty">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 8V6a2 2 0 0 1 2-2h2M18 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M6 20H4a2 2 0 0 1-2-2v-2"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <circle cx="12" cy="12" r="3.4" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+              <p>No image yet</p>
+            </div>
+
+            <img id="previewImg" class="vf-preview" alt="Preview of the uploaded skin spot photo" hidden>
+            <video id="cameraFeed" class="vf-preview" autoplay playsinline hidden></video>
+            <canvas id="captureCanvas" hidden></canvas>
+          </div>
+
+          <div class="scan-controls">
+            <label class="file-btn" for="fileInput">
+              Upload a photo
+              <input type="file" id="fileInput" accept="image/*" hidden>
+            </label>
+            <button type="button" class="btn-outline" id="cameraBtn">Use camera</button>
+            <button type="button" class="btn-outline" id="shutterBtn" hidden>Capture</button>
+            <button type="button" class="btn-primary" id="analyzeBtn" disabled>Analyze photo</button>
+          </div>
+          <p class="scan-hint" id="scanHint">Use a clear, well-lit, close-up photo for the most useful read.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS — hidden until an analysis runs -->
+    <section class="results" id="results" hidden aria-live="polite">
+      <div class="wrap results-grid">
+
+        <div class="result-card">
+          <p class="result-eyebrow">Suggested read</p>
+          <h2 id="resultLabel">—</h2>
+          <p class="result-desc" id="resultDesc"></p>
+
+          <div class="confidence">
+            <div class="confidence-head">
+              <span>Model confidence</span>
+              <span id="confidenceValue">—</span>
+            </div>
+            <div class="confidence-track">
+              <div class="confidence-fill" id="confidenceFill"></div>
+            </div>
+            <p class="confidence-note">A lower score means the model is less certain — treat any change you can see with
+              more caution, not less.</p>
+          </div>
+
+          <button type="button" class="btn-text" id="speakBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
+              <path d="M17 9a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+            Read result aloud
+          </button>
+        </div>
+
+        <div class="disclaimer-card">
+          <p class="disclaimer-title">This is not a medical diagnosis.</p>
+          <p>Please see a qualified doctor or dermatologist for any skin concern, especially a spot that's new,
+            changing, bleeding, or doesn't look like your others.</p>
+        </div>
+
+        <div class="tips-card">
+          <p class="result-eyebrow">Watch for</p>
+          <ul class="abcde">
+            <li><strong>Asymmetry</strong> — one half doesn't match the other</li>
+            <li><strong>Border</strong> — edges are ragged or blurred</li>
+            <li><strong>Colour</strong> — several shades in one spot</li>
+            <li><strong>Diameter</strong> — larger than a pencil eraser</li>
+            <li><strong>Evolving</strong> — any change in size, shape, or feel</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+      <div class="wrap">
+        <h2>How OncoScan works</h2>
+        <ol class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <h3>Capture or upload</h3>
+            <p>Open OncoScan on your phone or laptop, then upload a photo or use your camera. A preview confirms the
+              shot is clear before anything is analyzed.</p>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <h3>Image processing</h3>
+            <p>The photo is resized, normalised, and lighting-corrected, then studied by a trained model — EfficientNet,
+              ResNet, or MobileNet — trained on the HAM10000 and ISIC datasets.</p>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <h3>A clear result</h3>
+            <p>You see a suggested type, a confidence score, and short educational tips — with a plain-language
+              disclaimer on the same screen, every time.</p>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <h3>An interface for everyone</h3>
+            <p>Large touch targets, high contrast, and optional spoken results make the result easy to use and
+              understand, regardless of ability.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section class="principles" id="principles">
+      <div class="wrap">
+        <h2>Built on four rules</h2>
+        <div class="principle-list">
+          <div class="principle">
+            <h3>Safety first</h3>
+            <p>OncoScan never claims to diagnose cancer. Every result carries a disclaimer and points you toward a
+              professional — calmly, not alarmingly.</p>
+          </div>
+          <div class="principle">
+            <h3>Privacy-aware</h3>
+            <p>Photos aren't stored by default. Keeping a scan history is opt-in, requires consent, and can be deleted
+              at any time.</p>
+          </div>
+          <div class="principle">
+            <h3>Honest about limits</h3>
+            <p>Accuracy drops with poor lighting, blur, unusual angles, or skin tone variation. The confidence score
+              exists so you can weigh that.</p>
+          </div>
+          <div class="principle">
+            <h3>Accessible by default</h3>
+            <p>Semantic HTML, full keyboard support, screen-reader labels, high contrast, and spoken results — built in,
+              not bolted on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHO IT HELPS -->
+    <section class="help" id="help">
+      <div class="wrap">
+        <h2>Who OncoScan is for</h2>
+        <ul class="help-list">
+          <li>Anyone who's noticed a new or changing spot and wants a careful first look at home.</li>
+          <li>People who want plain guidance on when a dermatologist visit is worth booking.</li>
+          <li>Students and developers learning how to build health-aware AI responsibly.</li>
+          <li>Communities where specialist access is limited and an early nudge matters.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <p class="footer-disclaimer">OncoScan is an educational awareness tool. It does not diagnose skin cancer or any
+        other condition. Always consult a qualified doctor about a skin concern.</p>
+      <p class="footer-meta">OncoScan — a student awareness project.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
